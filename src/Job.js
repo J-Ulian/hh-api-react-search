@@ -1,18 +1,20 @@
-import React from 'react';
-import { Card, Badge } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Card, Badge, Button, Collapse } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 
 export default function Job({ job, logos }) {
+  const [open, setOpen] = useState(false);
+
   try {
     if (logos.original) {
-      var temp = logos[240];
+      var temp = logos.original;
     }
   } catch (e) {
     console.log(e);
   }
 
   return (
-    <Card>
+    <Card className="mb-3">
       <Card.Body>
         <div className="d-flex justify-content-between">
           <div>
@@ -40,6 +42,20 @@ export default function Job({ job, logos }) {
             src={temp}
           />
         </div>
+        <Card.Text>
+          <Button
+            onClick={() => setOpen((prevOpen) => !prevOpen)}
+            variant="primary"
+          >
+            {open ? 'Скрыть' : 'Подробнее'}
+          </Button>
+        </Card.Text>
+        <Collapse in={open}>
+          <div className="mt-4">
+            <ReactMarkdown source={job.snippet.requirement} />
+            <ReactMarkdown source={job.snippet.responsibility} />
+          </div>
+        </Collapse>
       </Card.Body>
     </Card>
   );
